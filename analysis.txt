@@ -65,8 +65,7 @@ Authorization: global.Base64.encode("ljwxapp:" + i.utils.md5("form_id=" + t + i.
 
 
 https://gateway.lianjia.com/wukong/ershoufang/search?city_id=350200&condition=&query=&order=&offset=0&limit=10
-authorization: LJ-HMAC-SHA256 accessKeyId=wukong; nonce=0.5184148752453301; timestamp=1544471581; signature=mJqPnTAgXgTHH+HH/p0K7BaOKlqs+K+it7V0srT0BlI=
-
+authorization: LJ-HMAC-SHA256 accessKeyId=wukong; nonce=0.4827498995444861; timestamp=1544554961; signature=Pxeg+KKhqqj5/p+jEARZqqPT4TyYDo+kL6kCed/qzZA=
 
 
 第一次破解失败
