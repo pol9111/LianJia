@@ -1,0 +1,164 @@
+
+todo: 试看看反编译.apk, func返回值 ->操作, 试看看破解authorization
+
+
+二手房
+https://app.api.lianjia.com/house/ershoufang/searchv4?priceRequest=&sugQueryStr=&has_recommend=1&isFromMap=false&condition=&limit_offset=0&communityRequset=&is_history=0&is_suggestion=0&moreRequest=&areaRequest=&roomRequest=&schoolRequest=&comunityIdRequest=&limit_count=20&city_id=110000
+租房
+https://app.api.lianjia.com/Rentplat/v1/house/list?city_id=110000&condition=&offset=0&limit=30&scene=home
+新房
+https://app.api.lianjia.com/newhouse/app/feed/index?page=0&has_filter=0&city_id=110000&request_ts=1544374635
+
+
+headers
+反编译apk，获取authorization的计算规则
+Authorization
+base64
+
+
+
+MjAxNzAzMjRfYW5kcm9pZD
+
+
+device-1
+二手房(一样)
+MjAxNzAzMjRfYW5kcm9pZDowMTViYzVhYTExM2E5ZGU1YWViMjc2NDBhMjg2ZmViMmUwM2NhZjVi
+
+租房(一样)
+MjAxNzAzMjRfYW5kcm9pZDoxZmY0OGYwMzIzZmRmZWUyYTc5ZGU1ZjM5MjVkMWM5NjM0ZDJlZDk0
+其他的
+MjAxNzAzMjRfYW5kcm9pZDo4OGUyNTc3N2E1MTcxMDBkYjVhOTgzZWQ3ZTNjMjMwNWUzODJhMzRj
+20170324_android:88e25777a517100db5a983ed7e3c2305e382a34c
+
+新房(每次不一样)
+MjAxNzAzMjRfYW5kcm9pZDowMTg0ZTQ3OTgzMjA3MjlmNjg0OTBmYTA4YzM2ZGU0NTQwNTQxOTIz
+MjAxNzAzMjRfYW5kcm9pZDo4NzE5MjdlYjY0YzM1MTFlNDI3YjVmODA4NjFjZTFiNmM0ZmMzZDU4
+MjAxNzAzMjRfYW5kcm9pZDo2YjMwZGE1NDlmOWMxMjIzOGRlZWUwMWE2ODA2NmJiNmU4ZTVjOTJj
+
+
+device-2
+二手房(一样)设备
+MjAxNzAzMjRfYW5kcm9pZDo4YTAwNTVkYTZjZjg0NjE2M2JhNGM4NmFjMzk3MTNlM2IzMzFmODEy
+下拉
+MjAxNzAzMjRfYW5kcm9pZDo3ODlkZWNlYWE4YjBjZGRiNzg4OGJhZGU1NTJkNGZjNDM1OTNiNjBm
+
+租房(一样)设备
+MjAxNzAzMjRfYW5kcm9pZDpkMGE2MmE0NTdmZjI1OWIzMmQ2MDU4OTZlNDdhNDk1NjBhMTA4NzMz
+其他的
+MjAxNzAzMjRfYW5kcm9pZDo4OGUyNTc3N2E1MTcxMDBkYjVhOTgzZWQ3ZTNjMjMwNWUzODJhMzRj
+
+
+新房(每次不一样)时间
+MjAxNzAzMjRfYW5kcm9pZDowYTM2MTU0ZWZjMTg2OGU4YWMyZTFjYzEzY2ZlMmY4M2M0MjA5ZDY0
+MjAxNzAzMjRfYW5kcm9pZDplYjk1YWEwOGQ2NmJlZTMxYmEzOWJiZDUxMDdkNWJhZjRhNGRhOTJm
+MjAxNzAzMjRfYW5kcm9pZDo5NDUwMDc3MzgxODgwZjI2OWE4MjAzYzc0MTkwNjlkOGFhYjVkYmI1
+
+
+
+
+把接口拷贝至Postman里面来验证下接口中需要的验证和必要的参数，经过验证接口里面请求参数都是必须参数，而且headers里面有一个必须添加的参数Authorization，通过验证发现Authorization，接口参数改变后Authorization值失效
+
+
+根据搜索出来的两端代码我们来进行一次分析,首先获取请求参数，然后对请求参数转换成为字典，然后通过key进行排序，使用将key和value通过= 链接起来，在末尾添加appkey，进行md5加密，最后在开头添加appid 进行base64 编码；
+
+Authorization: global.Base64.encode("ljwxapp:" + i.utils.md5("form_id=" + t + i.app_secret))
+
+
+https://gateway.lianjia.com/wukong/ershoufang/search?city_id=350200&condition=&query=&order=&offset=0&limit=10
+authorization: LJ-HMAC-SHA256 accessKeyId=wukong; nonce=0.5184148752453301; timestamp=1544471581; signature=mJqPnTAgXgTHH+HH/p0K7BaOKlqs+K+it7V0srT0BlI=
+
+
+
+第一次破解失败
+YK5vLCP4UUwQByl8P7SY+kxN+gcs/JmiWsv8s0ZkqH8=
+
+第二次破解成功(时间, 随机数, 跟请求参数等等进行Hmacsha256加密)
+Pxeg+KKhqqj5/p+jEARZqqPT4TyYDo+kL6kCed/qzZA=
+
+
+破解signatur
+define("utils/authorization.js", function (require, module, exports, window, document, frames, self, location, navigator, localStorage, history, Caches, screen, alert, confirm, prompt, XMLHttpRequest, WebSocket, Reporter, webkit, WeixinJSCore) {
+	"use strict";
+	Object.defineProperty(exports, "__esModule", {
+		value: !0
+	});
+	var e = require("../npm/crypto-js/index.js");
+	exports.default = function (t) {
+		var s = t.url,
+		r = t.method,
+		n = t.data, // 查询参数
+		a = s.split("?")[0].split("://")[1], // https://()?
+		o = a.split("/")[0],
+		p = a.split(o)[1],
+		i = "";
+		n && Object.keys(n).sort().map(function (e) {
+			i += e + "=" + n[e] + "&"
+		}), // 格式化查询参数
+		i = i.substr(0, i.length - 1),
+		r = (r = r || "GET").toUpperCase();
+		var c = parseInt((new Date).getTime() / 1e3),
+		u = String(Math.random()),
+		l = ["accessKeyId=wukong", "nonce=" + u, "timestamp=" + c, "method=" + r, "path=" + p, "host=" + o.split(":")[0].toUpperCase()];
+		i && "GET" === r && l.push("query=" + i); // 如果有查询参数的话  
+		var m = l.sort().join("&");
+		return "LJ-HMAC-SHA256 " + ["accessKeyId=wukong", "nonce=" + u, "timestamp=" + c, "signature=" + e.HmacSHA256(m, "lMl0XOUNSExcUYtw").toString(e.enc.Base64)].join("; ")
+	};
+});
+
+t=headers
+s=t.url
+a='gateway.lianjia.com/wukong/ershoufang/search'
+o='gateway.lianjia.com'
+o.split(":")[0].toUpperCase()=GATEWAY.LIANJIA.COM
+p='/wukong/ershoufang/search'
+r='GET'
+nonce=u=String(Math.random())
+timestamp=c=parseInt((new Date).getTime() / 1e3) 当前时间戳 1e3=1000
+l=["accessKeyId=wukong", "nonce="+u, "timestamp=" + c, "method=GET", "path=/wukong/ershoufang/search", "host=GATEWAY.LIANJIA.COM"];
+
+
+
+
+
+
+
+
+var s = 'https://gateway.lianjia.com/wukong/ershoufang/search?city_id=350200&condition=&query=&order=&offset=0&limit=10'
+a = s.split("?")[0].split("://")[1]
+o = a.split("/")[0]
+p = a.split(o)[1]
+console.log(a ,  o , p ,)
+var u = String(Math.random())
+var c = parseInt((new Date).getTime() / 1e3)
+// console.log(u ,  c ,)
+var r = 'get'
+r = (r = r || "GET").toUpperCase();
+n = {
+	'city_id': '350200',
+	'condition': '',
+	'query': '',
+	'order': '',
+	'offset': '0',
+	'limit':  '10',
+}
+i= ''
+n && Object.keys(n).sort().map(function (e) {
+			i += e + "=" + n[e] + "&"
+		})
+console.log(i)
+i = i.substr(0, i.length - 1)
+
+l = ["accessKeyId=wukong", "nonce=0.4827498995444861", "timestamp=1544554961"
+, "method=" + r, "path=" + p, "host=" + o.split(":"	)[0].toUpperCase()]
+
+i && "GET" === r && l.push("query=" + i);
+console.log(l)
+var m = l.sort().join("&");
+console.log(m)
+
+var CryptoJS = require("crypto-js/index.js");
+var rst = CryptoJS.HmacSHA256(m, "lMl0XOUNSExcUYtw").toString(CryptoJS.enc.Base64)
+// var rst = CryptoJS.HmacSHA256(m, "lMl0XOUNSExcUYtw")
+console.log(rst);
+
+
