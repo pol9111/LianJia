@@ -1,5 +1,5 @@
 
-todo: 试看看反编译.apk, func返回值 ->操作, 试看看破解authorization
+todo: 完成二手房的爬虫
 
 
 二手房
@@ -64,6 +64,8 @@ MjAxNzAzMjRfYW5kcm9pZDo5NDUwMDc3MzgxODgwZjI2OWE4MjAzYzc0MTkwNjlkOGFhYjVkYmI1
 Authorization: global.Base64.encode("ljwxapp:" + i.utils.md5("form_id=" + t + i.app_secret))
 
 
+
+链家微信小程序
 https://gateway.lianjia.com/wukong/ershoufang/search?city_id=350200&condition=&query=&order=&offset=0&limit=10
 authorization: LJ-HMAC-SHA256 accessKeyId=wukong; nonce=0.4827498995444861; timestamp=1544554961; signature=Pxeg+KKhqqj5/p+jEARZqqPT4TyYDo+kL6kCed/qzZA=
 
@@ -120,8 +122,6 @@ l=["accessKeyId=wukong", "nonce="+u, "timestamp=" + c, "method=GET", "path=/wuko
 
 
 
-
-
 var s = 'https://gateway.lianjia.com/wukong/ershoufang/search?city_id=350200&condition=&query=&order=&offset=0&limit=10'
 a = s.split("?")[0].split("://")[1]
 o = a.split("/")[0]
@@ -159,5 +159,96 @@ var CryptoJS = require("crypto-js/index.js");
 var rst = CryptoJS.HmacSHA256(m, "lMl0XOUNSExcUYtw").toString(CryptoJS.enc.Base64)
 // var rst = CryptoJS.HmacSHA256(m, "lMl0XOUNSExcUYtw")
 console.log(rst);
+
+
+抓取信息
+
+链家
+二手房  offset += 10, limit=10, city_id
+authorization: LJ-HMAC-SHA256 accessKeyId=wukong; nonce=0.7624574396439694; timestamp=1544660164; signature=YQdgN9cHIgKXNoYxW89Yabuo5xqxiti5/WtW5vfdWqM=
+
+贝壳新房, 租房
+新房
+https://wechat.ke.com/search/index?limit_offset=0&limit_count=20&city_id=350200
+authorization: ee20014929e097fad4f77db806343ba3
+limit_offset += 20, limit_count=20
+
+租房
+https://api.zu.ke.com/v1/house/list?city_id=350200&limit=30&offset=30&ts=1544662115
+rent-sign: e101204c9f4293dbb2b63b0be2a2cf68
+offset += 30    limit=30 
+
+
+信息结构
+
+二手房json
+{
+	"error_code": 0,
+	"error_msg": "success",
+	"request_id": 2196869319,
+	"uniq_id": "DEF2-79C2-9CE6-DF78-13465FC3464D",
+	"data": {
+		"list": {
+			"105101644818": {
+				"house_code": "105101644818",
+				"app_id": "105",
+				"house_area": 139.7,
+				"list_pic_url": "https://image1.ljcdn.com/350200-inspection/test-9131aa11-ccab-42aa-a0e5-25731c8172a3.png!m_fill,w_280,h_210,lg_north_west,lx_0,ly_0,l_rorate_logo,f_jpg,ls_50",
+				"title": "海沧区政府旁 南北通透  三房二厅二卫  满2年",
+				"frame_type": "3室2厅",
+				"floor_level": "高楼层",
+				"floor_total": "18",
+				"orientation": "南 北",
+				"building_type": "板楼",
+				"decoration_type": "精装",
+				"building_year": "2005",
+				"deal_property": "商品房",
+				"list_time": "2018.10.18",
+				"house_type": "普通住宅",
+				"elevator": "有电梯",
+				"total_price": 380,
+				"list_price": 380,
+				"unit_price": 27202,
+				"resblock_name": "未来橙堡",
+				"resblock_id": 3911057492739,
+				"view_url": {
+					"murl": "https://weixin.lianjia.com/xm/ershoufang/105101644818.html",
+					"city_id": "350200",
+					"entity_id": "105101644818",
+					"page_type": "ershoufang_detail",
+					"params": []
+				},
+				"reablock_url": {
+					"murl": "https://weixin.lianjia.com/xm/xiaoqu/3911057492739/",
+					"city_id": "350200",
+					"entity_id": 3911057492739,
+					"page_type": "xiaoqu_detail",
+					"params": []
+				},
+				"resblock_url_esf": {
+					"murl": "https://weixin.lianjia.com/xm/ershoufang/c3911057492739/",
+					"city_id": "350200",
+					"entity_id": "350200",
+					"page_type": "ershoufang_list",
+					"params": []
+				},
+				"is_sold": 0,
+				"is_remove": 0,
+				"is_focus": false,
+				"is_vr": false,
+				"is_yezhu_rec": false,
+				"subway_info": [],
+				"tags": [{
+						"key": "two",
+						"title": "满两年",
+						"color": "F2A12F",
+						"text_color": "rgb(242,161,47)",
+						"bg_color": "rgba(242,161,47,0.15)"
+					}
+				]
+			},
+
+
+
 
 
